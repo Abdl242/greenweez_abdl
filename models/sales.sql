@@ -1,5 +1,7 @@
 {{ config(schema='transaction') }}
 
+
+
 WITH
 
 sales AS (SELECT * FROM `gz_raw_data.raw_gz_sales`),
@@ -20,6 +22,7 @@ SELECT
     CAST(p.purchse_price AS FLOAT64) AS purchase_price,
     ROUND(s.quantity * CAST(p.purchse_price AS FLOAT64), 2) AS purchase_cost,
     -- margin --
-    s.revenue - s.quantity * CAST(p.purchse_price AS FLOAT64) AS margin
+    s.revenue - s.quantity * CAST(p.purchse_price AS FLOAT64) AS margin,
+    ROUND( SAFE_DIVIDE( (s.revenue - s.quantity*CAST(p.purchSE_PRICE AS FLOAT64)) , s.revenue ) , 2) as margin_pc
 FROM sales AS s
 INNER JOIN product AS p ON s.pdt_id = p.products_id
